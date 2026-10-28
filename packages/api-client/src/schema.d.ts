@@ -511,7 +511,7 @@ export interface components {
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /**
              * To Agent
              * Format: uuid
@@ -538,7 +538,7 @@ export interface components {
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /** Name */
             name: string;
             /**
@@ -579,7 +579,7 @@ export interface components {
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /**
              * Name
              * @description Unique name the agent is addressed by.
@@ -607,7 +607,7 @@ export interface components {
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /** Resources */
             resources: string[];
         };
@@ -682,13 +682,13 @@ export interface components {
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /**
              * Main Scope
              * Format: uuid
              * @description The main project scope containing all project resources.
              */
-            main_scope?: string;
+            main_scope: string;
             /** Name */
             name: string;
             /**
@@ -762,17 +762,17 @@ export interface components {
              * Anthropic File Id
              * @description Files API ID. Required for Anthropic-managed storage.
              */
-            anthropic_file_id?: string | null;
+            anthropic_file_id: string | null;
             /**
              * Content
              * @description The text or url itself. Required for in-place storage.
              */
-            content?: string | null;
+            content: string | null;
             /**
              * Id
              * Format: uuid
              */
-            id?: string;
+            id: string;
             /** Name */
             name: string;
             /**

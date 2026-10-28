@@ -2,7 +2,7 @@
 from typing import Literal
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # How the sender of a message relates to its recipient.
 type RelationshipType = Literal["report", "manager", "peer", "assistant"]
@@ -10,6 +10,9 @@ type RelationshipType = Literal["report", "manager", "peer", "assistant"]
 
 class AgentWorker(BaseModel):
     """An agent working in a project, backed by a Managed Agents agent."""
+
+    # Fields with defaults are always in responses, so document them as required there.
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
 
     id: UUID = Field(default_factory=uuid4)
     anthropic_id: str = Field(description="ID of the agent in the Managed Agents API.")
@@ -24,6 +27,9 @@ class AgentWorker(BaseModel):
 
 class AgentLink(BaseModel):
     """Permission for `from_agent` to send messages of `type` to `to_agent`."""
+
+    # Fields with defaults are always in responses, so document them as required there.
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
 
     id: UUID = Field(default_factory=uuid4)
     from_agent: UUID = Field(description="The agent allowed to send messages.")

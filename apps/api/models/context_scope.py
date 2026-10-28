@@ -2,11 +2,14 @@
 from typing import Literal
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Resource(BaseModel):
     """A piece of context that can be given to agents."""
+
+    # Fields with defaults are always in responses, so document them as required there.
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
 
     id: UUID = Field(default_factory=uuid4)
     name: str
@@ -24,6 +27,9 @@ class Resource(BaseModel):
 
 class ContextScope(BaseModel):
     """A set of resources available to an agent, role or project."""
+
+    # Fields with defaults are always in responses, so document them as required there.
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
 
     id: UUID = Field(default_factory=uuid4)
     resources: list[UUID]

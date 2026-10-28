@@ -67,6 +67,7 @@
           }
         },
         "required": [
+          "id",
           "from_agent",
           "to_agent",
           "type"
@@ -114,6 +115,7 @@
           }
         },
         "required": [
+          "id",
           "name",
           "description",
           "task_examples",
@@ -190,6 +192,7 @@
           }
         },
         "required": [
+          "id",
           "anthropic_id",
           "name",
           "project",
@@ -217,6 +220,7 @@
           }
         },
         "required": [
+          "id",
           "resources"
         ],
         "title": "ContextScope",
@@ -380,11 +384,13 @@
           }
         },
         "required": [
+          "id",
           "name",
           "description",
           "system_prompt",
           "team",
           "roles",
+          "main_scope",
           "context_scopes"
         ],
         "title": "Project",
@@ -539,9 +545,12 @@
           }
         },
         "required": [
+          "id",
           "name",
           "type",
-          "storage"
+          "storage",
+          "content",
+          "anthropic_file_id"
         ],
         "title": "Resource",
         "type": "object"

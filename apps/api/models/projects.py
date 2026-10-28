@@ -1,7 +1,7 @@
 """Projects: a team of agents working towards a shared goal."""
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ProjectRow(BaseModel):
@@ -25,6 +25,9 @@ class ProjectRow(BaseModel):
 
 class Project(BaseModel):
     """Project model used by services after additional fields are populated."""
+
+    # Fields with defaults are always in responses, so document them as required there.
+    model_config = ConfigDict(json_schema_serialization_defaults_required=True)
 
     id: UUID = Field(default_factory=uuid4)
     name: str

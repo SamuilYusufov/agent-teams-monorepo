@@ -1,15 +1,791 @@
+/* ---------------------------------------------------------------------------------------------------------
+   Design tokens. Every color, font and radius comes from here, so the look can change in one place and
+   dark mode is just a second set of values.
+   --------------------------------------------------------------------------------------------------------- */
 :root {
-  font-family: system-ui, sans-serif;
-  line-height: 1.5;
+  --paper: #eef1f5;
+  --surface: #f8f9fb;
+  --ink: #18233a;
+  --ink-soft: #5a6478;
+  --line: #d3d9e3;
+  --accent: #2b44d6;
+  --accent-ink: #ffffff;
+  --accent-wash: #e2e7fb;
+  --danger: #b3261e;
+  --danger-wash: #fbe9e7;
+
+  --rail: #18233a;
+  --rail-ink: #aeb8cc;
+  --rail-ink-strong: #ffffff;
+
+  --font-display: 'Bricolage Grotesque', 'Avenir Next', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, sans-serif;
+
+  /* Type scale: each step is 1.25 times the previous one. */
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.563rem;
+  --step-3: 2.441rem;
+
+  --radius-small: 6px;
+  --radius: 10px;
+  --tab-radius: 14px;
+
   color-scheme: light dark;
+  font-family: var(--font-body);
+  font-size: 100%;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--rail);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c2333;
+    --surface: #232b3d;
+    --ink: #e6eaf2;
+    --ink-soft: #9aa4b8;
+    --line: #343e54;
+    --accent: #8c9dff;
+    --accent-ink: #10162a;
+    --accent-wash: #2a3458;
+    --danger: #ff8a80;
+    --danger-wash: #3d2326;
+    --rail: #121826;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
 }
 
-main {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--step-3);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--step-1);
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Keyboard focus is always visible; mouse clicks don't show the ring (that's what :focus-visible decides). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Shell: the navy rail and the paper panel. The active tab is the same color as the panel and has inverted
+   corners above and below it, so it reads as a folder tab attached to the page.
+   --------------------------------------------------------------------------------------------------------- */
+.shell {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.rail {
+  padding: 2rem 0 2rem 1rem;
+  color: var(--rail-ink);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 500;
+  color: var(--rail-ink-strong);
+  padding: 0 1rem 2.5rem;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tab {
+  position: relative;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: var(--tab-radius) 0 0 var(--tab-radius);
+  background: transparent;
+  color: var(--rail-ink);
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--rail-ink-strong);
+}
+
+.tab[aria-selected='true'] {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.tab[aria-selected='true']::before,
+.tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: var(--tab-radius);
+  height: var(--tab-radius);
+  pointer-events: none;
+}
+
+.tab[aria-selected='true']::before {
+  top: calc(-1 * var(--tab-radius));
+  background: radial-gradient(circle at 0 0, transparent var(--tab-radius), var(--paper) calc(var(--tab-radius) + 0.5px));
+}
+
+.tab[aria-selected='true']::after {
+  bottom: calc(-1 * var(--tab-radius));
+  background: radial-gradient(circle at 0 100%, transparent var(--tab-radius), var(--paper) calc(var(--tab-radius) + 0.5px));
+}
+
+.tab:focus-visible {
+  outline-offset: -4px;
+}
+
+.panel {
+  background: var(--paper);
+  padding: 3rem clamp(1.25rem, 4vw, 3.5rem) 4rem;
+  min-width: 0;
+}
+
+.panel:focus-visible {
+  outline: none;
+}
+
+.panel > * {
+  max-width: 56rem;
+}
+
+/* On narrow screens the rail becomes a row of tabs above the panel. */
+@media (max-width: 720px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .rail {
+    padding: 1rem 0 0;
+  }
+
+  .brand {
+    padding: 0 1.25rem 0.75rem;
+  }
+
+  .tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0 0.75rem;
+  }
+
+  .tab {
+    font-size: var(--step-0);
+    border-radius: var(--tab-radius) var(--tab-radius) 0 0;
+    white-space: nowrap;
+  }
+
+  .tab[aria-selected='true']::before,
+  .tab[aria-selected='true']::after {
+    display: none;
+  }
+
+  .panel {
+    padding-top: 2rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Page structure
+   --------------------------------------------------------------------------------------------------------- */
+.page-header,
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+.lede {
+  margin-top: 0.5rem;
+  font-size: var(--step-1);
+  color: var(--ink-soft);
+  max-width: 38em;
+  line-height: 1.4;
+}
+
+.section {
+  margin-top: 3rem;
+}
+
+.section-header {
+  margin-bottom: 1rem;
+}
+
+.section-header .muted {
+  margin-top: 0.25rem;
+}
+
+.section-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: -1rem 0 1.5rem -0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+/* Lists of things: hairline rows rather than cards, so long lists stay scannable. */
+.rows {
+  border-top: 1px solid var(--line);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  padding: 0.75rem;
+  margin-left: -0.75rem;
+}
+
+.row-button {
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.row-button:hover {
+  background: var(--accent-wash);
+}
+
+.row-title {
+  display: block;
+  font-weight: 600;
+}
+
+.row-desc {
+  display: block;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-meta {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* On phones the description matters more than the counts, which the detail page shows anyway. */
+@media (max-width: 480px) {
+  .row-meta {
+    display: none;
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+}
+
+.notice {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-small);
+  background: var(--accent-wash);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.error-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-small);
+  background: var(--danger-wash);
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Buttons. One filled button per area marks the main action; everything else is quieter.
+   --------------------------------------------------------------------------------------------------------- */
+.button,
+.button-secondary,
+.button-quiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-small);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button-secondary {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.button-secondary:hover {
+  border-color: var(--ink-soft);
+}
+
+.button-quiet {
+  border: 1px solid transparent;
+  background: none;
+  color: var(--accent);
+  padding-inline: 0.5rem;
+}
+
+.button-quiet:hover {
+  background: var(--accent-wash);
+}
+
+.button-danger {
+  border-color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+}
+
+:is(.button, .button-secondary, .button-quiet):disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: var(--accent-wash);
+  color: var(--ink);
+}
+
+.icon-button-danger:hover {
+  background: var(--danger-wash);
+  color: var(--danger);
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Roles in a project: removable chips and a search that lists roles to add.
+   --------------------------------------------------------------------------------------------------------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--accent-wash);
+  font-weight: 600;
+}
+
+.chip-remove {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+}
+
+.chip-remove:hover {
+  background: var(--surface);
+  color: var(--danger);
+}
+
+.search {
+  margin-top: 1rem;
+  max-width: 32rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+
+.search-box:focus-within {
+  border-color: var(--accent);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  outline: none;
+}
+
+.search-results {
+  margin-top: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.search-results li + li {
+  border-top: 1px solid var(--line);
+}
+
+.search-result {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-result:hover,
+.search-result:focus-visible {
+  background: var(--accent-wash);
+}
+
+.search-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.search-empty {
+  padding: 0.6rem 0.75rem;
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Forms
+   --------------------------------------------------------------------------------------------------------- */
+.form,
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.field-label {
+  font-weight: 600;
+}
+
+.field-hint {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  background: var(--surface);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field :is(input, select, textarea):focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+.radio-group,
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio-group legend {
+  padding: 0;
+  margin-bottom: 0.25rem;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0;
+  cursor: pointer;
+}
+
+.check input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.check-name {
+  flex: 1;
+}
+
+.checklist-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.checklist-toolbar .field-label {
+  margin-right: auto;
+}
+
+.checklist-toolbar .muted {
+  font-size: var(--step--1);
+}
+
+.checklist li + li {
+  border-top: 1px solid var(--line);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ---------------------------------------------------------------------------------------------------------
+   Dialogs and the drawer. Motion only answers the user opening something, and is off for reduced motion.
+   --------------------------------------------------------------------------------------------------------- */
+.modal {
+  border: 0;
+  padding: 0;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 24px 64px rgb(12 18 32 / 0.35);
+}
+
+.modal::backdrop {
+  background: rgb(12 18 32 / 0.5);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.modal-header h2 {
+  font-size: var(--step-2);
+  margin-top: 0.125rem;
+}
+
+.modal-header .icon-button {
+  margin: -0.25rem -0.5rem 0 0;
+}
+
+.modal-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  border-radius: var(--radius);
+}
+
+.modal-dialog[open] {
+  animation: modal-in 160ms ease-out;
+}
+
+.confirm-text {
+  color: var(--ink-soft);
+}
+
+.modal-drawer {
+  width: min(30rem, 100vw);
+  height: 100dvh;
+  max-height: none;
+  margin: 0 0 0 auto;
+  border-radius: var(--tab-radius) 0 0 var(--tab-radius);
+}
+
+.modal-drawer[open] {
+  animation: drawer-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modal-drawer .modal-body {
+  padding: 2rem 1.75rem;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal[open] {
+    animation: none;
+  }
 }
