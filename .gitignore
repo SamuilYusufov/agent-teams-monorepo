@@ -26,7 +26,7 @@ npm-debug.log*
 .claude/settings.local.json
 
 # Editors and OS
-.idea/workspace.xml
+.idea/
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
