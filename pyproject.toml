@@ -1,0 +1,56 @@
+# uv workspace root for the Python projects in this monorepo. It is not a project itself.
+# Every Python project lives under apps/ or packages/ and is listed in `members`.
+
+[tool.uv.workspace]
+members = ["apps/api"]
+
+# Shared Ruff configuration for every Python project in the repo.
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+src = ["apps/api"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes: unused imports/variables, undefined names
+    "I",        # import sorting
+    "N",        # pep8 naming
+    "UP",       # modern syntax for the target Python version
+    "B",        # bugbear: likely bugs and design problems
+    "S",        # bandit: security issues (SQL injection, hardcoded secrets, ...)
+    "ASYNC",    # blocking calls and other mistakes in async code
+    "FAST",     # FastAPI: Annotated dependencies, redundant response models
+    "PT",       # pytest style
+    "ARG",      # unused arguments
+    "C4",       # comprehensions
+    "SIM",      # simplifications
+    "RET",      # return statements
+    "PIE",      # misc. unnecessary code
+    "PERF",     # performance anti-patterns
+    "FURB",     # modernisations
+    "PTH",      # pathlib over os.path
+    "DTZ",      # timezone-naive datetimes
+    "T20",      # print statements: use logging
+    "LOG", "G", # logging usage
+    "ERA",      # commented-out code
+    "TID",      # banned/relative imports
+    "TRY",      # exception handling
+    "PL",       # pylint
+    "RUF",      # ruff-specific
+]
+ignore = [
+    "TRY003",   # services raise domain errors with descriptive f-string messages
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = [
+    "S101",     # assert is how pytest checks things
+    "ARG001",   # fixtures are often requested only for their side effects
+    "PLR2004",  # literal values in assertions are fine
+]
+
+[tool.ruff.lint.pylint]
+# Services take their repositories through the constructor.
+max-args = 8
+max-positional-args = 8

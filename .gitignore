@@ -1,0 +1,32 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.db
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+*.local
+npm-debug.log*
+
+# Turborepo
+.turbo/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Editors and OS
+.idea/workspace.xml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store

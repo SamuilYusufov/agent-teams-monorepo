@@ -1,0 +1,11 @@
+{
+  "name": "@agent-team/api",
+  "private": true,
+  "description": "Turborepo tasks for the Python API. Python dependencies are managed by uv in pyproject.toml.",
+  "scripts": {
+    "dev": "uv run python main.py",
+    "test": "uv run pytest",
+    "lint": "uv run ruff check .",
+    "openapi": "uv run python scripts/export_openapi.py openapi.json"
+  }
+}

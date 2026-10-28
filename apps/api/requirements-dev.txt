@@ -1,0 +1,35 @@
+-r requirements.txt
+colorama==0.4.6 ; sys_platform == 'win32'
+    # via pytest
+gherkin-official==42.0.1
+    # via pytest-bdd
+iniconfig==2.3.1
+    # via pytest
+mako==1.4.3
+    # via pytest-bdd
+markupsafe==3.0.4
+    # via mako
+packaging==26.3
+    # via
+    #   pytest
+    #   pytest-bdd
+parse==1.22.4
+    # via
+    #   parse-type
+    #   pytest-bdd
+parse-type==0.6.6
+    # via pytest-bdd
+pluggy==1.7.0
+    # via pytest
+pygments==2.21.0
+    # via pytest
+pytest==9.1.1
+    # via pytest-bdd
+pytest-bdd==9.0.0
+ruff==0.17.3
+six==1.17.0
+    # via parse-type
+typing-extensions==4.16.0
+    # via
+    #   gherkin-official
+    #   pytest-bdd

@@ -1,0 +1,25 @@
+[project]
+name = "agent-team-api"
+version = "0.1.0"
+description = "REST API and team MCP server for teams of Claude agents."
+requires-python = ">=3.14"
+dependencies = [
+    "anthropic>=2.3.0",
+    "fastapi>=0.162.0",
+    "fastmcp>=4.1.4",
+    "mcp>=2.3.0",
+    "pydantic>=2.14.1",
+    "uvicorn>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    # pytest-bdd 9.0.0 relies on pytest internals that pytest 9.2 renamed. Lift the cap once pytest-bdd supports 9.2.
+    "pytest>=9.1.1,<9.2",
+    "pytest-bdd>=9.0.0",
+    "ruff>=0.17.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "passThroughEnv": ["ANTHROPIC_*", "AGENTS_DB_PATH", "MCP_PUBLIC_URL", "MCP_SECRET"]
+    }
+  }
+}

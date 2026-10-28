@@ -1,0 +1,20 @@
+{
+  "name": "@agent-team/api-client",
+  "private": true,
+  "description": "Typed client for the agent team API, generated from its OpenAPI schema.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "openapi-typescript ../../apps/api/openapi.json --output src/schema.d.ts"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "@agent-team/api": "*",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.3"
+  }
+}
